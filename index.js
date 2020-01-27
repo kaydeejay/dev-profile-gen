@@ -1,6 +1,10 @@
 const fs = require('fs');
 const axios = require ('axios');
 const inquirer = require('inquirer');
+const generateHTML = require('./generateHTML.js');
+
+console.log(generateHTML);
+// console.log(generateHTML);
 
 inquirer
   .prompt([
@@ -12,17 +16,18 @@ inquirer
     {
       type: 'list',  
       message: 'What is your Favorite Color?',
-      choices: ['red','orange','yellow','green','blue','purple'],
+      choices: ['red','pink','green','blue'],
       name: 'favColor'
     }
   ])
   .then(function(response){
     // console.log(response);
-    const queryURL = `https://api.github.com/users/${response.username}/repos?per_page=100`;
+    const queryURL = `https://api.github.com/users/${response.username}`;
     axios
       .get(queryURL)
       .then(function(response){
           // do whatever, got the data
-          console.log(response[0]);
+          console.log(queryURL);
+          console.log(response);
       });
   }); 
