@@ -3,7 +3,7 @@ const axios = require ('axios');
 const inquirer = require('inquirer');
 const generateHTML = require('./generateHTML.js');
 
-console.log(generateHTML);
+console.log(generateHTML.generateHTML);
 // console.log(generateHTML);
 
 inquirer
