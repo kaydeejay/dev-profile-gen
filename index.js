@@ -1,10 +1,7 @@
 const fs = require('fs');
 const axios = require ('axios');
 const inquirer = require('inquirer');
-const generateHTML = require('./generateHTML.js');
-
-console.log(generateHTML.generateHTML);
-// console.log(generateHTML);
+const template = require('./generateHTML.js');
 
 inquirer
   .prompt([
@@ -21,13 +18,16 @@ inquirer
     }
   ])
   .then(function(response){
-    // console.log(response);
     const queryURL = `https://api.github.com/users/${response.username}`;
+    const chosenColor = response.favColor;
     axios
       .get(queryURL)
       .then(function(response){
-          // do whatever, got the data
-          console.log(queryURL);
-          console.log(response);
+        response.color = chosenColor;
+        // console.log(template.generateHTML(response));
+        const data = template.generateHTML(response);
+        fs.writeFile('tester.html', data, (err) => {
+          if (err) throw err;
+        })         
       });
   }); 
