@@ -24,10 +24,10 @@ inquirer
       .get(queryURL)
       .then(function(response){
         response.color = chosenColor;
-        // console.log(template.generateHTML(response));
         const data = template.generateHTML(response);
         fs.writeFile('tester.html', data, (err) => {
           if (err) throw err;
-        })         
+          else console.log('success');
+        });         
       });
   }); 
