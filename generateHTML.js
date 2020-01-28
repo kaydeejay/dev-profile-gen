@@ -218,6 +218,7 @@ function generateHTML(data) {
                   <h4>
                     Github Stars:
                   </h4>
+                  ${data.starredLength}
                 </div>
               </div>
               <div class="col">

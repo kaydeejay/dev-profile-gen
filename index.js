@@ -24,10 +24,16 @@ inquirer
       .get(queryURL)
       .then(function(response){
         response.color = chosenColor;
-        const data = template.generateHTML(response);
-        fs.writeFile('tester.html', data, (err) => {
-          if (err) throw err;
-          else console.log('success');
-        });         
+        const starsURL = queryURL + `/starred`;
+        axios
+        .get(starsURL)
+        .then(function(starResponse){
+          response.starredLength = starResponse.data.length;
+          const data = template.generateHTML(response);
+          fs.writeFile('tester.html', data, (err) => {
+            if (err) throw err;
+            else console.log('success');
+          });         
+        });
       });
   }); 
