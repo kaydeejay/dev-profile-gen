@@ -30,7 +30,7 @@ inquirer
         .then(function(starResponse){
           response.starredLength = starResponse.data.length;
           const data = template.generateHTML(response);
-          fs.writeFile('tester.html', data, (err) => {
+          fs.writeFile('resume.html', data, (err) => {
             if (err) throw err;
             else console.log('success');
           });         
