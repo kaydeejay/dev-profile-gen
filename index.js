@@ -2,10 +2,8 @@ const fs = require('fs');
 const axios = require ('axios');
 const inquirer = require('inquirer');
 const template = require('./generateHTML.js');
-const convertFactory = require('electron-html-to');
-const conversion = convertFactory({
-  converterPath: convertFactory.converters.PDF
-});
+const pdf = require('html-pdf');
+const options = { format: 'Letter' };
 
 function getUserResponse(){
   inquirer
@@ -46,7 +44,8 @@ function githubCall(obj){
   })
     .then(funcResponse => githubStarsCall(funcResponse))
     .then(starResponse => generateHTML(starResponse))
-    .then(rawHTML => convertToPDF(rawHTML));
+    .then(rawHTML => convertToPDF(rawHTML))
+    .catch(err => console.log(err));
 }
 
 function githubStarsCall(obj){
@@ -71,12 +70,13 @@ function generateHTML(obj){
       rej("Where'd your object go?")
     } else {
       const data = template.generateHTML(obj);
-      // fs.writeFile('resume.html', data, (err) => {
-      //   if (err) throw err;
-      //   else console.log('success');
-      // });
-      console.log(typeof data);
+      fs.writeFile('resume.html', data, (err) => {
+        if (err) throw err;
+        else console.log('success');
+      });
       res(data);
+      // const html = fs.readFileSync('./resume.html', 'utf8');
+      // res(html);
     }
   });
 }
@@ -84,13 +84,14 @@ function generateHTML(obj){
 function convertToPDF(str){
   return new Promise((res,rej) => {
     if (!str) {
-      rej('So close...')
+      rej('so close...');
     } else {
-      conversion({ html: str }, function(err, result){
-        if (err) {
-          return console.error(err);
+      pdf.create(str, options).toFile('./resume.pdf', function(error, resolve){
+        if (error) {
+          return console.log(error);
+        } else {
+          console.log(resolve);
         }
-        result.stream.pipe(fs.createWriteStream('./resume.pdf'));
         res('success');
       });
     }
